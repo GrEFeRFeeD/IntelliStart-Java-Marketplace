@@ -18,6 +18,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "products")
 public class Product {
 
     @Id

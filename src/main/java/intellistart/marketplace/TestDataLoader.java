@@ -1,4 +1,4 @@
-package intellistart.marketplace;
+/*package intellistart.marketplace;
 
 import intellistart.marketplace.services.ProductService;
 import intellistart.marketplace.services.UserProductService;
@@ -24,4 +24,4 @@ public class TestDataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
     }
-}
+}*/

@@ -15,6 +15,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_products")
 public class UserProduct {
 
     @EmbeddedId

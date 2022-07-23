@@ -15,8 +15,8 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private UserService userService;
-    private ProductService productService;
+    private final UserService userService;
+    private final ProductService productService;
 
     @Autowired
     public UserController(UserService userService, ProductService productService) {
@@ -25,8 +25,35 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping(value = "/users", params = "productId")
+    public ResponseEntity<?> getUsersByProduct(@RequestParam(name = "productId") Long productId,
+                                               @RequestParam(name = "withCount", required = false) String withCount) {
+
+        Product product;
+        try {
+            product = productService.getProductById(productId);
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+
+        if (withCount == null) {
+            return ResponseEntity.ok(userService.getUsersByProduct(product));
+        } else {
+            return ResponseEntity.ok(userService.getUsersByProductWithCount(product));
+        }
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
+
+        user.setId(null);
+        userService.saveUser(user);
+        return ResponseEntity.ok("User " + user.getFirstName() + " " + user.getLastName()
+                + " was successfully added");
     }
 
     @PostMapping("/users/{id}/purchase")
@@ -55,16 +82,18 @@ public class UserController {
         return ResponseEntity.ok("Purchase successful");
     }
 
-    @GetMapping(value = "/users", params = "productId")
-    public ResponseEntity<?> getUsersByProduct(@RequestParam(name = "productId") Long productId) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") Long userId) {
 
-        Product product;
+        User user;
         try {
-            product = productService.getProductById(productId);
-        } catch (NotEnoughBalanceException exception) {
+            user = userService.getUserById(userId);
+        } catch (IllegalArgumentException exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
 
-
+        userService.deleteUser(user);
+        return ResponseEntity.ok("User " + user.getFirstName() + " " + user.getLastName()
+                + " was successfully deleted");
     }
 }

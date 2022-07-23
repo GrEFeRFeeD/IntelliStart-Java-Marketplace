@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProductKey {
+public class UserProductKey implements Serializable {
 
     @Column(name = "user_id")
     private Long userId;

@@ -8,13 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
-    private UserProductService userProductService;
+    private final ProductRepository productRepository;
+    private final UserProductService userProductService;
 
     @Autowired
     public ProductService(ProductRepository productRepository, UserProductService userProductService) {
@@ -45,6 +47,13 @@ public class ProductService {
                 .map(UserProduct::getProduct)
                 .toList();
         return productsByUser;
+    }
+
+    public Map<Product, Integer> getProductsByUserWithCount(User user) {
+        List<UserProduct> userProductsByUser = userProductService.getUserProductsByUser(user);
+        Map<Product, Integer> productsByUserWithCount = userProductsByUser.stream()
+                .collect(Collectors.toMap(UserProduct::getProduct, UserProduct::getCount));
+        return productsByUserWithCount;
     }
 
     public void deleteProduct(Product product) {

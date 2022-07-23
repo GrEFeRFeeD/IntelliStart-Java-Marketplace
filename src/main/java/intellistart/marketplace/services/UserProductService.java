@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserProductService {
 
-    private UserProductRepository userProductRepository;
+    private final UserProductRepository userProductRepository;
 
     @Autowired
     public UserProductService(UserProductRepository userProductRepository) {

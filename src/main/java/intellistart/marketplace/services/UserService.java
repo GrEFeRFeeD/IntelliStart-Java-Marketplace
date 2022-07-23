@@ -8,14 +8,18 @@ import intellistart.marketplace.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private UserProductService userProductService;
+    private final UserRepository userRepository;
+    private final UserProductService userProductService;
 
     @Autowired
     public UserService(UserRepository userRepository, UserProductService userProductService) {
@@ -46,6 +50,13 @@ public class UserService {
                 .map(UserProduct::getUser)
                 .toList();
         return usersByProduct;
+    }
+
+    public Map<User, Integer> getUsersByProductWithCount(Product product) {
+        List<UserProduct> userProductsByProduct = userProductService.getUserProductsByProduct(product);
+        Map<User, Integer> usersByProductWithCount = userProductsByProduct.stream()
+                .collect(Collectors.toMap(UserProduct::getUser, UserProduct::getCount));
+        return usersByProductWithCount;
     }
 
     public void purchaseProduct(User user, Product product) throws NotEnoughBalanceException {
