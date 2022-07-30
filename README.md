@@ -19,7 +19,7 @@ Practical test challenge
 </ol>
 
 ## Used technologies
-Java, Spring (Boot, Data, Web), Hibernate, PostreSQL
+Java, Spring (Boot, Data, Web), Hibernate, PostgreSQL
 
 ## Deployment
 Deployed at: https://marketplace-test-intellistart.herokuapp.com/
